@@ -8,4 +8,14 @@
     <!--FactoryBean-->
     <bean id="sqlSessionFactory" class="com.vainglory.Factory.SqlSessionFactoryFactoryBean"/>
 
+    <!--
+    静态工厂方法
+    factory-method指定工厂类的工厂方法
+    -->
+    <bean id="sqlSessionFactory1" factory-method="getSqlSessionFactory" class="com.vainglory.Factory.SqlSessionFactoryFactory"/>
+
+    <!--工厂方法-->
+    <bean id="sqlSessionFactoryFactoryMethod" class="com.vainglory.Factory.SqlSessionFactoryFactoryMethod"/>
+    <bean id="sqlSessionFactory2" factory-bean="sqlSessionFactoryFactoryMethod" factory-method="getSqlSessionFactory" scope="singleton"/>
+
 </beans>

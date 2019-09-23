@@ -3,6 +3,7 @@
 二、基于setter函数的注入
 三、注入内部bean
 四、注入集合
+五、FactoryBean
 
 一、基于构造函数的注入
 当容器调用带有一组参数的类构造函数时，基于构造函数的 DI 就完成了，其中每个参数代表一个对其他类的依赖。
@@ -38,3 +39,26 @@ xml文件配置
         <bean id="innerBean" class="..."/>
     </property>
 </bean>
+
+五、FactoryBean
+(工厂Bean)
+一般情况下，Spring通过反射机制利用bean的class属性指定实现类来实例化bean 。在某些情况下，实例化bean过程比较复杂，如果按照传统的方式，则需要在<bean>中提供大量的配置信息，配置方式的灵活性是受限的，这时采用编码的方式可能会得到一个简单的方案。Spring为此提供了一个org.Springframework.bean.factory.FactoryBean的工厂类接口，用户可以通过实现该接口定制实例化bean的逻辑。
+
+Spring工厂中一种特殊的Bean，可以生产对象。Spring工厂中的小作坊，用于生产某一类复杂对象。
+在工厂中有些Bean，无法直接通过简单的<bean></bean>生产，比如Connection、SqlSessionFactory（复杂类型的Bean）
+
+使用步骤：
+声明一个类实现FactoryBean接口，实现 getObject() 方法
+在xml文件中配置该Bean
+<bean id="sqlSessionFactory" class="com.vainglory.Factory.SqlSessionFactoryFactoryBean"/>
+注意：该FactoryBean，返回的并不是FactoryBean本身，而是该工厂BeanFactory生产的产品，
+如果想要获取该工厂本身，可以使用 "&BeanID" 来获取。
+
+第二种实现方式：静态工厂
+声明一个工厂类，在xml中配置该工厂类的Bean
+<bean id="sqlSessionFactory1" factory-method="getSqlSessionFactory" class="com.vainglory.Factory.SqlSessionFactoryFactory"/>
+注意：必须使用factory-method指明获取产品的方法。
+
+第三种实现方式：工厂方法模式
+<bean id="sqlSessionFactoryFactoryMethod" class="com.vainglory.Factory.SqlSessionFactoryFactoryMethod"/>
+<bean id="sqlSessionFactory3" factory-bean="sqlSessionFactoryFactoryMethod" factory-method="getSqlSessionFactory" scope="singleton"/>
