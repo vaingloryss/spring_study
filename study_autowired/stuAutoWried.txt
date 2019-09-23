@@ -1,0 +1,35 @@
+
+一、Spring自动装配
+
+Spring 容器可以在不使用<constructor-arg>和<property> 元素的情况下自动装配相互协作的 bean 之间的关系，
+这有助于减少编写一个大的基于 Spring 的应用程序的 XML 配置的数量。
+Spring的自动装配有三种：
+
+ByName：根据名称自动装配
+ByType：根据类型自动装配
+Contractor：有构造器自动装配
+default：默认，先根据构造器自动装配，如果不成功，根据；类型进行自动装配
+
+<bean>标签中有一个autowried属性，用于指定Bean的自动装配类型,例如
+<bean id="textEditor" class="com.vainglory.bean.TextEditor" autowire="byName">
+
+不能自动装配所谓的简单类型包括基本类型，字符串和类。
+自动装配不如显式装配精确，所以如果可能的话尽可能使用显式装配。
+
+二、根据名称自动装配：ByName
+这种模式由属性名称指定自动装配。
+Spring 容器看作 beans，在 XML 配置文件中 beans 的 auto-wire 属性设置为 byName。
+然后，它尝试将它的属性与配置文件中定义为相同名称的 beans 进行匹配和连接。
+如果找到匹配项，它将注入这些 beans，否则，它将抛出异常。
+
+三、根据类型自动装配：ByType
+这种模式由属性类型指定自动装配。
+Spring 容器看作 beans，在 XML 配置文件中 beans 的 autowire 属性设置为 byType。
+然后，如果它的 type 恰好与配置文件中 beans 名称中的一个相匹配，它将尝试匹配和连接它的属性。
+如果找到匹配项，它将注入这些 beans，否则，它将抛出异常。
+
+四、有构造器自动装配：Contractor
+这种模式与 byType 非常相似，但它应用于构造器参数。
+Spring 容器看作 beans，在 XML 配置文件中 beans 的 autowire 属性设置为 constructor。
+然后，它尝试把它的构造函数的参数与配置文件中 beans 名称中的一个进行匹配和连线。
+如果找到匹配项，它会注入这些 bean，否则，它会抛出异常。

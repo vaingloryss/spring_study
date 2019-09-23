@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+    <bean id="spellChecker" class="com.vainglory.bean.SpellChecker"/>
+    <!--手动注入方式配置-->
+    <!--<bean id="textEditor" class="com.vainglory.bean.TextEditor">
+        <property name="spellChecker" ref="spellChecker"/>
+        <property name="name" value="Generic Text Editor"/>
+    </bean>-->
+
+    <!--自动装配ByName-->
+    <!--<bean id="textEditor1" class="com.vainglory.bean.TextEditor" autowire="byName">
+        <property name="name" value="Generic Text Editor"/>
+    </bean>-->
+
+    <!--自动装配ByType-->
+    <!--<bean id="textEditor2" class="com.vainglory.bean.TextEditor" autowire="byType">
+        <property name="name" value="Generic Text Editor"/>
+    </bean>-->
+
+    <!--自动装配ByConstructor-->
+    <bean id="textEditor3" class="com.vainglory.bean.TextEditor" autowire="constructor">
+        <property name="name" value="Generic Text Editor"/>
+        <constructor-arg value="Generic Text Editor"/>
+    </bean>
+</beans>

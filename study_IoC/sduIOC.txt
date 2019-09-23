@@ -1,0 +1,132 @@
+目录：
+一、spring中的容器技术
+二、获取bean的一般步骤
+三、Bean的作用域
+四、bean的生命周期
+五、Bean的后置处理器
+六、Bean的定义继承
+
+一、spring中的容器技术
+
+1、BeanFactory 容器 ：
+
+这是一个最简单的容器，它主要的功能是为依赖注入 （DI） 提供支持，
+这个容器接口在 org.springframework.beans.factory.BeanFactor 中被定义。
+BeanFactory 和相关的接口，比如BeanFactoryAware、DisposableBean、InitializingBean，仍旧保留在 Spring 中，
+主要目的是向后兼容已经存在的和那些 Spring 整合在一起的第三方框架。
+在 Spring 中，有大量对 BeanFactory 接口的实现。其中，最常被使用的是 XmlBeanFactory 类（已过时）。
+这个容器从一个 XML 文件中读取配置元数据，由这些元数据来生成一个被配置化的系统或者应用。
+
+2、ApplicationContext 容器
+ApplicationContext 是 BeanFactory 的子接口，也被成为 Spring 上下文。
+ApplicationContext 是 spring 中较高级的容器。
+和 BeanFactory 类似，它可以加载配置文件中定义的 bean，将所有的 bean 集中在一起，当有请求的时候分配 bean。
+另外，它增加了企业所需要的功能，比如，从属性文件中解析文本信息和将事件传递给所指定的监听器。
+这个容器在 org.springframework.context.ApplicationContext interface 接口中定义。
+ApplicationContext 包含 BeanFactory 所有的功能，一般情况下，相对于 BeanFactory，ApplicationContext 会更加优秀。
+
+3、ApplicationContext的接口实现
+
+（1）FileSystemXmlApplicationContext：
+    该容器从 XML 文件中加载已被定义的 bean。在这里，你需要提供给构造器 XML 文件的完整路径。如“/src/main/resources/beans.xml”
+（2）ClassPathXmlApplicationContext：该容器从 XML 文件中加载已被定义的 bean。在这里，你不需要提供 XML 文件的完整路径，
+    只需正确配置 CLASSPATH 环境变量即可，因为，容器会从 CLASSPATH 中搜索 bean 配置文件。
+（3）WebXmlApplicationContext：
+    在spring-web中被定义。
+    该容器会在一个 web 应用程序的范围内加载在 XML 文件中已被定义的 bean。
+
+4、获取bean的一般步骤
+
+第一步：
+在xml文件中配置bean
+<bean id="user" class="com.vainglory.bean.User">
+    <property name="id" value="001"/>
+</bean>
+
+第二步：读取xml文件中的bean
+1、创建应用程序上下文applicationContext
+ApplicationContext applicationContext = new ClassPathXmlApplicationContext("beans.xml");
+加载成功控制台打印日志：Loading XML bean definitions from class path resource [beans.xml]
+2、获取bean
+applicationContext.getBean("user");
+
+二、Bean的定义
+
+1、被称作 bean 的对象是构成应用程序的支柱也是由 Spring IoC 容器管理的。
+bean 是一个被实例化，组装，并通过 Spring IoC 容器所管理的对象。
+这些 bean 是由用容器提供的配置元数据创建的。
+2、xml文件中定义Bean的元数据
+
+标签：<bean></bean>
+属性：
+class：强制，指定用来创建 bean 的 bean 类。
+name：bean 标识符。在基于 XML 的配置元数据中，你可以使用 ID 和/或 name 属性来指定 bean 标识符。
+scope：bean作用域，会在 bean 作用域的章节中进行讨论。
+constructor-arg：它是用来注入依赖关系的，并会在接下来的章节中进行讨论。
+properties：它是用来注入依赖关系的，并会在接下来的章节中进行讨论。
+autowiring mode：它是用来注入依赖关系的，并会在接下来的章节中进行讨论。
+lazy-initialization mode：延迟初始化的 bean 告诉 IoC 容器在它第一次被请求时，而不是在启动时去创建一个 bean 实例。
+initialization 方法：在 bean 的所有必需的属性被容器设置之后，调用回调方法。它将会在 bean 的生命周期章节中进行讨论。
+destruction 方法：当包含该 bean 的容器被销毁时，使用回调方法。它将会在 bean 的生命周期章节中进行讨论。
+
+三、Bean的作用域
+1、声明周期
+singleton：在spring IoC容器仅存在一个Bean实例，Bean以单例方式存在，默认。创建容器时就同时自动创建了一个bean的对象，即饿汉式单例。
+prototype：每次从容器中调用Bean时，都返回一个新的实例，即每次调用getBean()时，相当于执行newXxxBean()
+
+对有状态的bean应该使用prototype作用域，而对无状态的bean则应该使用singleton作用域。
+
+request：每次HTTP请求都会创建一个新的Bean，该作用域仅适用于WebApplicationContext环境
+session：同一个HTTP Session共享一个Bean，不同Session使用不同的Bean，仅适用于WebApplicationContext环境
+global-session：一般用于Portlet应用环境，该运用域仅适用于WebApplicationContext环境
+
+2、xml中配置bean作用域
+<bean id="user" class="com.vainglory.bean.User"  scope="singleton"></bean>
+
+四、bean的声明周期
+
+1、JavaBean中定义初始化和销毁的回调方法：
+public void init(){
+    System.out.println("user 被初始化了...");
+}
+public void destroy(){
+    System.out.println("user 被销毁了...");
+}
+
+2、xml文件中配置初始化和销毁的回调方法
+<bean id="user" class="com.vainglory.bean.User" init-method="init" destroy-method="destroy"></bean>
+
+五、Bean的后置处理器
+
+1、Bean 后置处理器允许在调用初始化方法前后对 Bean 进行额外的处理。
+BeanPostProcessor也称为Bean后置处理器，它是Spring中定义的接口，
+在Spring容器的创建过程中（具体为Bean初始化前后）会回调BeanPostProcessor中定义的两个方法。
+postProcessBeforeInitialization方法会在每一个bean对象的初始化方法调用之前回调；
+postProcessAfterInitialization方法会在每个bean对象的初始化方法调用之后被回调。
+
+可以配置多个 BeanPostProcessor 接口，通过设置 BeanPostProcessor 实现的 Ordered 接口提供的 order 属性来控制这些 BeanPostProcessor 接口的执行顺序。
+BeanPostProcessor 可以对 bean（或对象）实例进行操作，这意味着 Spring IoC 容器实例化一个 bean 实例，然后 BeanPostProcessor 接口进行它们的工作。
+
+2、使用
+第一步：创建后置处理器类，实现BeanPostProcessor
+public class UserBeanProcessor implements BeanPostProcessor {}
+第二步：配置UserBeanProcessor这个后置处理器的Bean
+<bean class="com.vainglory.processor.UserBeanProcessor"/>
+
+六、Bean的定义继承
+
+1、bean 定义可以包含很多的配置信息，包括构造函数的参数，属性值，容器的具体信息例如初始化方法，静态工厂方法名，等等。
+子 bean 的定义继承父定义的配置数据。子定义可以根据需要重写一些值，或者添加其他值。
+Spring Bean 定义的继承与 Java 类的继承无关，但是继承的概念是一样的。你可以定义一个父 bean 的定义作为模板和其他子 bean 就可以从父 bean 中继承所需的配置。
+当你使用基于 XML 的配置元数据时，通过使用父属性，指定父 bean 作为该属性的值来表明子 bean 的定义。
+
+使用步骤：
+Bean中有两个JavaBean：User VipUser(无继承关系)
+第一步：在xml文件中定义一个User类型的Bean——user
+<bean id="user" class="com.vainglory.bean.User"></bean>
+第二步：定义一个Vipuser类型的Bean——vipUser，指定其父Bean
+<bean parent="user" id="vipUser" class="com.vainglory.bean.VipUser"></bean>
+注意，Bean的定义继承时，会将其他属性配置（如init-method等）一块继承过来，如果子Bean中没有这些方法会创建Bean失败。
+
+
+

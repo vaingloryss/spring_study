@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <!--
+    beans的属性，为该文件中的所有bean配置初始化和销毁方法
+    default-init-method="init"
+    default-destroy-method="destroy"
+    -->
+
+    <bean id="user" class="com.vainglory.bean.User" init-method="init" destroy-method="destroy"
+          scope="singleton">
+        <property name="id" value="001"/>
+        <property name="username" value="Jack"/>
+        <property name="gender" value="男"/>
+        <property name="phone" value="18637867878"/>
+    </bean>
+
+    <bean parent="user" id="vipUser" class="com.vainglory.bean.VipUser">
+        <property name="id" value="002"/>
+        <property name="vipId" value="1001"/>
+    </bean>
+
+    <!--每个Bean被初始化前后都会调用该后置处理器-->
+    <!--<bean class="com.vainglory.processor.UserBeanProcessor"/>-->
+</beans>

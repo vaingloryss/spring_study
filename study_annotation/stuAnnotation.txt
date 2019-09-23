@@ -1,0 +1,39 @@
+注解配置：
+1、@Required
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Required {}
+
+注解应用于 bean 属性的 setter 方法上，它表明受影响的 bean 属性在配置时必须放在 XML 配置文件中，
+否则容器就会抛出一个 BeanInitializationException 异常。
+并且，在bean配置的xml文件中，会提示Required properties missing.
+
+
+2、@Autowired
+自动装配
+
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Autowired {
+	boolean required() default true;
+}
+
+@Autowired 注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。
+注意：
+不能自动装配所谓的简单类型包括基本类型，字符串。
+
+通过 @Autowired在类字段和构造器上的使，可以消除 set ，get方法。
+@Autowired 注释对在哪里和如何完成自动连接提供了更多的细微的控制。
+
+默认情况下，@Autowired 注释意味着依赖是必须的，它类似于 @Required 注释，
+即如果对一个setter方法使用了@Autowired注解，而在xml文件中没有进行依赖的注入，此时会报错。
+然而，你可以使用 @Autowired 的 （required=false） 选项关闭默认行为。
+此时如果在xml文件中没有进行依赖的注入，@Autowired修饰的字段会被赋值为null值，而不是报错
+
+
+3、@Qualifier
+
+可能会有这样一种情况，当你创建多个具有相同类型的 bean 时，并且想要用一个属性只为它们其中的一个进行装配，
+在这种情况下，你可以使用 @Qualifier 注释和 @Autowired 注释通过指定哪一个真正的 bean 将会被装配来消除混乱。

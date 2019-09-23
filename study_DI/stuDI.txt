@@ -1,0 +1,40 @@
+目录：
+一、基于构造函数的注入
+二、基于setter函数的注入
+三、注入内部bean
+四、注入集合
+
+一、基于构造函数的注入
+当容器调用带有一组参数的类构造函数时，基于构造函数的 DI 就完成了，其中每个参数代表一个对其他类的依赖。
+步骤：
+构造器：
+public TextEditor(SpellChecker spellChecker) {
+    this.spellChecker = spellChecker;
+}
+xml文件注入配置：
+<bean id="spellChecker" class="com.vainglory.bean.SpellChecker"/>
+
+<!--构造器注入-->
+<bean id="editor1" class="com.vainglory.bean.TextEditor">
+    <constructor-arg ref="spellChecker"/>
+</bean>
+ref表示当前值为一个引用。
+
+二、基于setter函数的注入
+public void setSpellChecker(SpellChecker spellChecker) {
+    this.spellChecker = spellChecker;
+}
+xml文件配置
+<bean id="spellChecker" class="com.vainglory.bean.SpellChecker"/>
+<bean id="editor2" class="com.vainglory.bean.TextEditor">
+    <property name="spellChecker" ref="spellChecker"/>
+</bean>
+
+三、注入内部bean
+
+正如你所知道的 Java 内部类是在其他类的范围内被定义的，同理，inner beans 是在其他 bean 的范围内定义的 bean。
+<bean id="outerBean" class="...">
+    <property name="target">
+        <bean id="innerBean" class="..."/>
+    </property>
+</bean>
