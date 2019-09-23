@@ -1,11 +1,12 @@
-import com.vainglory.BeanConfig;
+import com.vainglory.config.BeanConfig;
 import com.vainglory.domain.Student;
 import com.vainglory.domain.TextEditor;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import javax.xml.soap.Text;
 
 public class TestAnnotation {
     //@Required
@@ -49,13 +50,4 @@ public class TestAnnotation {
         //textEditor2.spellCheck();
     }
 
-    //测试Java配置
-    @Test
-    public void test05(){
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfig.class);
-        Student student3 = (Student) applicationContext.getBean("student3");
-        //Student student4 = applicationContext.getBean("student3",Student.class);
-        System.out.println(student3.toString());
-
-    }
 }

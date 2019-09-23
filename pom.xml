@@ -14,6 +14,7 @@
         <module>study_aop</module>
         <module>study_autowired</module>
         <module>study_annotation</module>
+        <module>study_CustomEvent</module>
     </modules>
 
     <dependencies>
