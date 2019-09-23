@@ -5,6 +5,7 @@
 四、bean的生命周期
 五、Bean的后置处理器
 六、Bean的定义继承
+七、FactoryBean
 
 一、spring中的容器技术
 
@@ -49,6 +50,8 @@ ApplicationContext applicationContext = new ClassPathXmlApplicationContext("bean
 加载成功控制台打印日志：Loading XML bean definitions from class path resource [beans.xml]
 2、获取bean
 applicationContext.getBean("user");
+
+原理：通过反射，默认调用无参构造方法，创建Bean的对象。
 
 二、Bean的定义
 
@@ -129,4 +132,12 @@ Bean中有两个JavaBean：User VipUser(无继承关系)
 注意，Bean的定义继承时，会将其他属性配置（如init-method等）一块继承过来，如果子Bean中没有这些方法会创建Bean失败。
 
 
+七、FactoryBean
+(工厂Bean)
+一般情况下，Spring通过反射机制利用bean的class属性指定实现类来实例化bean 。在某些情况下，实例化bean过程比较复杂，如果按照传统的方式，则需要在<bean>中提供大量的配置信息，配置方式的灵活性是受限的，这时采用编码的方式可能会得到一个简单的方案。Spring为此提供了一个org.Springframework.bean.factory.FactoryBean的工厂类接口，用户可以通过实现该接口定制实例化bean的逻辑。
+
+Spring工厂中一种特殊的Bean，可以生产对象。Spring工厂中的小作坊，用于生产某一类复杂对象。
+在工厂中有些Bean，无法直接通过简单的<bean></bean>生产，比如Connection、SqlSessionFactory（复杂类型的Bean）
+
+配置FactoryBean，返回的并不是FactoryBean本身，而是该工厂BeanFactory生产的产品，如果想要获取该工厂本身，可以使用 "&BeanID" 来获取。
 

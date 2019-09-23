@@ -70,6 +70,4 @@
             <bean id="spellChecker1" class="com.vainglory.bean.SpellChecker"/>
         </property>
     </bean>
-
-
 </beans>
