@@ -1,0 +1,109 @@
+一、什么是AOP
+
+1、AOP(Aspect Oriented Programming)：
+面型切面编程，耦是程序员在代码开发过程中一直追求的。AOP也是为了解耦所诞生的。
+具体思想是：定义一个切面，在切面的纵向定义处理方法，处理完成后，回到横向业务流。
+AOP 在Spring 框架中被作为核心组成部分之一，的确 Spring 将 AOP发挥到很强大的功能。最常见的就是事务控制。
+AOP主要是利用代理模式的技术来实现的。
+
+2、概念术语：
+切面（aspect）：用来切插业务方法的类。
+连接点（joinpoint）：是切面类和业务类的连接点，其实就是封装了业务方法的一些基本属性，作为通知的参数来解析。
+通知（advice）：在切面类中，声明对业务方法做额外的处理的方法。
+切入点（pointcut）：业务类中指定的方法，作为切面切入的点。其实就是指定某个方法作为切面切的地方。
+目标对象（target ）：被代理对象。
+AOP代理（aop proxy）：代理对象。
+
+3、AOP通知类型：
+前置通知（before advice）：在切入点之前执行前，执行通知；
+后置通知（after advice）：在切入点执行完成后，执行通知；
+环绕通知（around advice）：包围切入点，调用方法前后完成自定义行为；
+异常通知（after throwing advice）：在切入点抛出异常后，执行通知。
+
+注意：只有被spring管理的Bean才能使用AOP
+
+4、AOP接口：
+Advice
+BeforeAdvice:前置通知，继承Advice
+MethodInterceptor:环绕通知，继承Interceptor
+MethodBeforeAdvice:前置通知，继承BeforeAdvice
+AfterReturningAdvice:后置通知，继承Advice
+ThrowsAdvice:异常通知，继承Advice
+
+Advice接口在aopalliance.aop(aop联盟)包中，其实现接口都在org.springframework.aop包中。
+老版本的spring-aop依赖aopalliance.jar，新版本的spring-aop整合了aopalliance
+
+5、切入点表达式：
+（1）execution
+    限定所有。示例：
+    expression="execution(public * com.vainglory.*.*(..))
+    public 访问修饰符，可以省略，
+    第一个*号，方法的返回值类型，* 号表示任意，也可以指定
+    com.vainglory.*.*(..):声明指定包下的某个类的某个方法作为切点，可以使用*号代替，
+    com.vainglory.*.*:表示指定包下的任意类的任意方法，
+    (..):表示该方法的参数类型，可以使用..代替，表示任意的参数类型和数目
+
+（2）within
+    仅限定包和类
+
+（3）args
+    仅对方法参数进行限定，不论该方法在哪个包哪个类。
+
+三种表达式可以联合使用：and、or、not
+execution() and within() or args()
+
+6、AOP实现的两大阵营
+1、Spring-aspects
+Spring依赖了AspectJ的一个核心jar文件，aspectjweaver
+
+2、AspectJ
+AspectJ有三个核心包：
+aspectjrt：aspectJ运行时，the AspectJ runtime
+aspectjweaver：the AspectJ weaver
+aspectjtools：the AspectJ compiler
+
+二、AOP实现的三种方式
+1、方式一：AOP接口方式
+利用Spring AOP接口实现AOP，主要是为了指定自定义通知来供Spring AOP 机制识别。
+主要接口：前置通知（MethdoBeforeAdvice），后置通知（AfterReturningAdvice），环绕通知（MethodInterceptor），异常通知（ThrowsAdvice）。
+2、方式二：schema配置
+（com.vainglory.domain包中的示例）
+
+3、方式三：AspectJ注解方式
+（com.vainglory.aspectJAnnotation包中的示例）
+
+
+三、AOP核心：代理模式
+
+1、代理模式：静态代理、动态代理
+静态代理：
+动态代理：
+
+2、动态代理：JDK动态代理、cglib动态代理
+JDK动态代理：
+核心API：InvocationHandler
+cglib动态代理：
+
+spring-aop底层已经实现这两种动态代理模式，程序运行时会根据代理类有无接口，动态的选择使用哪种代理方式。
+如果被代理的目标本身是接口或是已经被代理的对象，此时使用JDK动态代理
+
+四、增强一个类的功能的三种方式：
+    1、继承：
+    缺点：
+    被增强的对象不能变；
+    增强的内容不能变；
+
+    2、装饰者模式：
+    装饰模式指的是在不必改变原类文件和使用继承的情况下，动态地扩展一个对象的功能
+    装饰者模式有如下几种角色：
+    抽象构件角色（Project）：给出一个接口，以规范准备接收附加责任的对象。
+    具体构件角色（Employe）：定义一个将要接收附加责任的类。
+    装饰角色（Manager）：持有一个构件对象的实例，并定义一个与抽象构件接口一致的接口。
+    具体装饰角色（ManagerA、ManagerB）：负责给构件对象“贴上”附加的责任。
+
+    3、代理模式：
+
+
+
+
+

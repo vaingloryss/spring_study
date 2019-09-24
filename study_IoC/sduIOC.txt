@@ -98,22 +98,31 @@ public void destroy(){
 2、xml文件中配置初始化和销毁的回调方法
 <bean id="user" class="com.vainglory.bean.User" init-method="init" destroy-method="destroy"></bean>
 
-五、Bean的后置处理器
+五、Bean的后置处理器（BeanPostProcessor）
 
 1、Bean 后置处理器允许在调用初始化方法前后对 Bean 进行额外的处理。
 BeanPostProcessor也称为Bean后置处理器，它是Spring中定义的接口，
 在Spring容器的创建过程中（具体为Bean初始化前后）会回调BeanPostProcessor中定义的两个方法。
+
 postProcessBeforeInitialization方法会在每一个bean对象的初始化方法调用之前回调；
 postProcessAfterInitialization方法会在每个bean对象的初始化方法调用之后被回调。
+注意是每一个Bean
 
 可以配置多个 BeanPostProcessor 接口，通过设置 BeanPostProcessor 实现的 Ordered 接口提供的 order 属性来控制这些 BeanPostProcessor 接口的执行顺序。
 BeanPostProcessor 可以对 bean（或对象）实例进行操作，这意味着 Spring IoC 容器实例化一个 bean 实例，然后 BeanPostProcessor 接口进行它们的工作。
+
+动态代理模式把原始Bean替换为动态生成的代理Bean就是在BeanPostProcessor的postProcessAfterInitialization方法中。
+aspectJ动态代理的后置处理器：AspectJWareAdvisorAutoProxyCreator.
+只有被切点切入的Bean会执行AspectJWareAdvisorAutoProxyCreator后置处理器。
 
 2、使用
 第一步：创建后置处理器类，实现BeanPostProcessor
 public class UserBeanProcessor implements BeanPostProcessor {}
 第二步：配置UserBeanProcessor这个后置处理器的Bean
 <bean class="com.vainglory.processor.UserBeanProcessor"/>
+每个Bean被初始化前后都会调用该后置处理器。
+如果没有配置自定义的后置处理器，spring也有默认的一些后置处理器，这些默认的后置处理器一般不改变Bean的行为。
+所以，Bean的后置处理器的前置方法..before..和后置处理器的后置方法..after..方法属于每个Bean的生命周期的一部分。
 
 六、Bean的定义继承
 

@@ -1,0 +1,31 @@
+一、动态代理：
+
+JDK动态代理：需要接口
+cglib动态代理：需要一个目标类
+
+1、JDK动态代理
+底层核心类:JdkDynamicAopProxy.getProxy()
+继承关系：JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializable
+JdkDynamicAopProxy.getProxy()
+
+2、cglib动态代理
+CGLIB(Code Generation Library)是一个开源项目！
+是一个强大的，高性能，高质量的Code生成类库，它可以在运行期扩展Java类与实现Java接口。
+Hibernate支持它来实现PO(Persistent Object 持久化对象)字节码的动态生成。
+
+底层核心类:ObjenesisCglibAopProxy
+继承了CglibAopProxy
+创建代理：ObjenesisCglibAopProxy.createProxyClassAndInstance()
+
+spring-aop底层已经实现这两种动态代理模式，程序运行时会根据代理类有无接口，动态的选择使用哪种代理方式。
+如果被代理的目标本身是接口或是已经被代理的对象，此时使用JDK动态代理
+
+配置优先使用cglib动态代理
+<aop:config proxy-target-class="true">
+
+静态代理：
+代理类和被代理类共同实现同一个接口，然后在代理类中传入被代理类的对象，继而增强被代理类的功能，最后使用的是代理类的对象。
+动态代理：
+被代理类实现某一个接口，然后需要有一个类实现InvocationHandler接口并传入被代理类，用于动态创建代理类。
+调用Proxy的静态方法newProxyInstance，传入被代理类的类加载器、被代理类的所有接口以及传入被代理类的InvocationHandler实现类，
+生成一个名为 com.sun.proxy.$Proxy+Id 的代理类，使用此代理类增强被代理类。

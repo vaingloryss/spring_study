@@ -11,7 +11,7 @@
     -->
 
     <bean id="user" class="com.vainglory.bean.User" init-method="init" destroy-method="destroy"
-          scope="singleton">
+          scope="singleton" >
         <property name="id" value="001"/>
         <property name="username" value="Jack"/>
         <property name="gender" value="男"/>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd ">
+
+    <!--配置aop-->
+    <aop:config>
+        <!--声明切点-->
+        <aop:pointcut id="oderPointcut" expression="execution(* com.vainglory.aopInterface.OrderService.*(..))"/>
+        <!--为节点声明一个或多个建言（advice）-->
+        <aop:advisor advice-ref="customBeforeAdvice" pointcut-ref="oderPointcut"/>
+        <aop:advisor advice-ref="customAfterAdvice" pointcut-ref="oderPointcut"/>
+        <aop:advisor advice-ref="customMethodInterceptor" pointcut-ref="oderPointcut"/>
+    </aop:config>
+
+    <!--普通Bean-->
+    <!--只有被spring管理的bean，才能使用aop-->
+    <bean id="orderService" class="com.vainglory.aopInterface.OrderService"/>
+
+    <!--声明切面，注入切面的Bean-->
+    <!--前置通知-->
+    <bean id="customBeforeAdvice" class="com.vainglory.aopInterface.advice.CustomBeforeAdvice"/>
+    <!--后置通知-->
+    <bean id="customAfterAdvice" class="com.vainglory.aopInterface.advice.CustomAfterAdvice"/>
+    <!--环绕通知-->
+    <bean id="customMethodInterceptor" class="com.vainglory.aopInterface.advice.CustomMethodInterceptor"/>
+</beans>

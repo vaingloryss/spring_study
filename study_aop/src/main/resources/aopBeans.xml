@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd ">
+
+    <!--开启aop注解-->
+    <aop:aspectj-autoproxy/>
+    <!--xmlns是一个属性，同一个文件中不能拥有同名的 xmlns ，所以需要起别名，xmlns:aop，aop就是别名-->
+
+
+    <!--配置aop-->
+    <aop:config>
+        <!--配置切面-->
+        <aop:aspect id="log" ref="logging">
+            <!--expression="execution(public * com.vainglory.*.*(..))-->
+            <!--public 访问修饰符，可以省略，
+            第一个*号，方法的返回值类型，* 号表示任意，也可以指定
+            com.vainglory.*.*(..):声明指定包下的某个类的某个方法作为切点，可以使用*号代替，
+            com.vainglory.*.*:表示指定包下的任意类的任意方法，
+            (..):表示该方法的参数类型，可以使用..代替，表示任意的参数类型和数目
+            -->
+
+            <!--声明切点-->
+            <aop:pointcut id="testAop" expression="execution(* com.vainglory.domain.Student.*(..))"/>
+
+            <!--为节点声明一个或多个建言（advice）-->
+            <aop:before pointcut-ref="testAop" method="beforeAdvice"/>
+            <aop:after pointcut-ref="testAop" method="afterAdvice"/>
+            <aop:after-returning pointcut-ref="testAop" returning="retVal" method="afterReturningAdvice"/>
+            <aop:after-throwing pointcut-ref="testAop" throwing="ex" method="afterThrowingAdvice"/>
+
+        </aop:aspect>
+    </aop:config>
+
+    <!--普通Bean-->
+    <!--只有被spring管理的bean，才能使用aop-->
+    <bean id="student" class="com.vainglory.domain.Student">
+        <property name="name" value="张三"/>
+        <property name="age" value="21"/>
+    </bean>
+    <bean id="userService" class="com.vainglory.aspectJAnnotation.UserService"/>
+    <bean id="orderService" class="com.vainglory.aopInterface.OrderService"/>
+
+    <!--声明切面，注入切面的Bean-->
+    <bean id="logging" class="com.vainglory.domain.Logging"/>
+    <bean id="userServiceMonitor" class="com.vainglory.aspectJAnnotation.UserServiceMonitor"/>
+</beans>

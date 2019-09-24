@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd ">
+
+    <!--开启aop注解-->
+    <aop:aspectj-autoproxy/>
+    <!--xmlns是一个属性，同一个文件中不能拥有同名的 xmlns ，所以需要起别名，xmlns:aop，aop就是别名-->
+
+    <!--普通Bean-->
+    <!--只有被spring管理的bean，才能使用aop-->
+    <bean id="userService" class="com.vainglory.aspectJAnnotation.UserService"/>
+    <!--声明切面，注入切面的Bean-->
+    <bean id="userServiceMonitor" class="com.vainglory.aspectJAnnotation.UserServiceMonitor"/>
+</beans>
