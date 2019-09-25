@@ -17,6 +17,23 @@ CGLIB包的底层是通过使用一个小而快的字节码处理框架ASM，来
 除了CGLIB包，脚本语言例如Groovy和BeanShell，也是使用ASM来生成java的字节码。当然不鼓励直接使用ASM，
 因为它要求你必须对JVM内部结构包括class文件的格式和指令集都很熟悉。
 
+分析：
+第一步：实现CGLIB动态代理必须有一个实现MethodInterceptor（方法拦截器）接口的类，MethodInterceptor类只有一个intercept方法，这个方法有四个参数：
+1）obj表示增强的对象，即实现这个接口类的一个对象；
+2）method表示要被拦截的方法；
+3）args表示要被拦截方法的参数；
+4）proxy表示要触发父类的方法对象；
+
+第二部：通过Enhancer.create()方法创建代理对象，该方法中调用了createHelper()方法，
+在createHelper中preValidate()方法校验callbackTypes、filter是否为空，以及为空时的处理。
+通过newInstance()方法创建EnhancerKey对象，作为Enhancer父类AbstractClassGenerator.create()方法
+真正创建代理对象方法在nextInstance()方法中，该方法为抽象类AbstractClassGenerator的一个方法，签名如下：
+abstract protected Object nextInstance(Object instance) throws Exception;
+
+data.newInstance(argumentTypes, arguments, callbacks)方法，
+第一个参数为代理对象的构成器类型，第二个为代理对象构造方法参数，第三个为对应回调对象。
+最后根据这些参数，通过反射生成代理对象。
+
 
 底层核心类:ObjenesisCglibAopProxy
 继承了CglibAopProxy
