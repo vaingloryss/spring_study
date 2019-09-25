@@ -1,4 +1,4 @@
-package com.vainglory.dynamicProxy;
+package com.vainglory.jdkDynamicProxy;
 
 /**
  * @author vaingloryss

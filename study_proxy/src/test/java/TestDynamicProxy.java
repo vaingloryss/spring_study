@@ -1,6 +1,4 @@
-package com.vainglory.dynamicProxy.testDynamicProxy;
-
-import com.vainglory.dynamicProxy.*;
+import com.vainglory.jdkDynamicProxy.*;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationHandler;

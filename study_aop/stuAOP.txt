@@ -30,7 +30,8 @@ MethodBeforeAdvice:前置通知，继承BeforeAdvice
 AfterReturningAdvice:后置通知，继承Advice
 ThrowsAdvice:异常通知，继承Advice
 
-Advice接口在aopalliance.aop(aop联盟)包中，其实现接口都在org.springframework.aop包中。
+Advice接口在aopalliance.aop(aop联盟)包中，其实现接口都在org.springframework.aop包中，
+环绕通知MethodInterceptor例外，也在aopalliance包中。
 老版本的spring-aop依赖aopalliance.jar，新版本的spring-aop整合了aopalliance
 
 5、切入点表达式：

@@ -1,5 +1,3 @@
-package com.vainglory.staticProxy.testStaticProxy;
-
 import com.vainglory.staticProxy.Cinema;
 import com.vainglory.staticProxy.Movie;
 import com.vainglory.staticProxy.RealMovie;
@@ -7,9 +5,9 @@ import org.junit.Test;
 
 /**
  * @author vaingloryss
- * @date 2019/9/24 0024 下午 7:31
+ * @date 2019/9/25 0025 上午 8:11
  *
- *静态代理测试类
+ * 静态代理测试类
  */
 public class TestStaticProxy {
     @Test
