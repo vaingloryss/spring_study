@@ -39,7 +39,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>4.3.18.RELEASE</version>
+            <version>5.2.21.RELEASE</version>
         </dependency>
         <!--该依赖中传递依赖了很多spring核心jar文件，简单spring项目，引入这一个依赖即可-->
         <dependency>
